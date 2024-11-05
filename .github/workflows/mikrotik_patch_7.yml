@@ -150,8 +150,8 @@ jobs:
           elif [ "${{ matrix.arch }}" == "arm64" ]; then
             sudo wget -nv -O mikrotik.iso https://download.mikrotik.com/routeros/$LATEST_VERSION/mikrotik-$LATEST_VERSION$ARCH.iso
           elif [ "${{ matrix.arch }}" == "arm" ] || [ "${{ matrix.arch }}" == "mmips" ] || [ "${{ matrix.arch }}" == "mipsbe" ] || [ "${{ matrix.arch }}" == "smips" ] || [ "${{ matrix.arch }}" == "tile" ] || [ "${{ matrix.arch }}" == "ppc" ]; then
-            sudo wget -nv -O routeros.npk https://download.mikrotik.com/routeros/$LATEST_VERSION/routeros-7.16$ARCH.npk
-            sudo wget -nv -O routeros.zip https://download.mikrotik.com/routeros/$LATEST_VERSION/all_packages$ARCH-7.16.zip
+            sudo wget -nv -O routeros.npk https://download.mikrotik.com/routeros/$LATEST_VERSION/routeros-${{$LATEST_VERSION}}$ARCH.npk
+            sudo wget -nv -O routeros.zip https://download.mikrotik.com/routeros/$LATEST_VERSION/all_packages$ARCH-${{$LATEST_VERSION}}.zip
           fi
           
     - name: Patch mikrotik-${{ env.LATEST_VERSION }}${{ env.ARCH }}.iso
@@ -159,7 +159,7 @@ jobs:
       run: |
         if [ "${{ matrix.arch }}" == "arm" ] || [ "${{ matrix.arch }}" == "mmips" ] || [ "${{ matrix.arch }}" == "mipsbe" ] || [ "${{ matrix.arch }}" == "smips" ] || [ "${{ matrix.arch }}" == "tile" ] || [ "${{ matrix.arch }}" == "ppc" ]; then
           sudo -E python3 patch.py npk routeros.npk
-          sudo -E python3 npk.py sign routeros.npk routeros-7.16$ARCH.npk
+          sudo -E python3 npk.py sign routeros.npk routeros-${{$LATEST_VERSION}}$ARCH.npk
           sudo unzip routeros.zip -d tmp
           NPK_FILES=$(find ./tmp/*.npk)
           for file in $NPK_FILES; do
