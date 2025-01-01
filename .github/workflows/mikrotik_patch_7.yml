@@ -32,10 +32,10 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        arch: [x86,arm64,arm,mmips,mipsbe,smips,tile,ppc]
+        arch: [x86]
         channel: [stable]
     env:
-      TZ: 'Asia/Jakarta'
+      TZ: 'Europe/Prague'
       LATEST_VERSION: ""
       ARCH: ""
 
