@@ -516,7 +516,7 @@ jobs:
         fi
 
     - name: Create Release tag ${{ env.LATEST_VERSION }} ${{ matrix.arch }}
-      if: steps.get_latest.outputs.has_new_version == 'true' && steps.get_latest.outputs.has_patched_npk == 'true'
+      if: steps.get_latest.outputs.has_patched_npk == 'true'
       uses: softprops/action-gh-release@v2
       with:
         name: "RouterOS ${{ env.LATEST_VERSION }} ${{ matrix.arch }}"
