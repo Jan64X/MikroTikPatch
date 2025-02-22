@@ -533,7 +533,40 @@ jobs:
           install-image-${{ env.LATEST_VERSION }}.zip
           routeros-${{ env.LATEST_VERSION }}${{ env.ARCH }}.npk
           all_packages-*-${{ env.LATEST_VERSION }}.zip
-          
+
+	- name: Upload ISO artifact
+	  if: steps.get_latest.outputs.has_new_version == 'true'
+	  uses: actions/upload-artifact@v4
+	  with:
+		name: mikrotik-${{ env.LATEST_VERSION }}${{ env.ARCH }}-iso
+		path: mikrotik-${{ env.LATEST_VERSION }}${{ env.ARCH }}.iso
+
+	- name: Upload NPK artifacts
+	  if: steps.get_latest.outputs.has_new_version == 'true'
+	  uses: actions/upload-artifact@v4
+	  with:
+		name: npk-packages-${{ env.LATEST_VERSION }}${{ env.ARCH }}
+		path: |
+		  all_packages/*.npk
+		  all_packages-${{ matrix.arch }}-${{ env.LATEST_VERSION }}.zip
+
+	- name: Upload CHR artifacts
+	  if: steps.get_latest.outputs.has_new_version == 'true' && steps.get_latest.outputs.has_patched_npk == 'true'
+	  uses: actions/upload-artifact@v4
+	  with:
+		name: chr-images-${{ env.LATEST_VERSION }}${{ env.ARCH }}
+		path: |
+		  chr-${{ env.LATEST_VERSION }}*.zip
+
+	- name: Upload Netinstall artifacts
+	  if: steps.get_latest.outputs.has_new_version == 'true' && matrix.arch == 'x86' && steps.get_latest.outputs.has_patched_npk == 'true'
+	  uses: actions/upload-artifact@v4
+	  with:
+		name: netinstall-${{ env.LATEST_VERSION }}
+		path: |
+		  netinstall-${{ env.LATEST_VERSION }}.*
+		  install-image-${{ env.LATEST_VERSION }}.zip
+
 #  Create_CSV:
 #    needs: Patch_RouterOS
 #    runs-on: ubuntu-22.04
